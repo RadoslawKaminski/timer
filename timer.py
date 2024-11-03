@@ -66,7 +66,8 @@ def create_floating_clock(toggle_osd_state):
     def resize_window(event):
         new_width = event.x + 10
         new_height = event.y + 10
-        osd_window.geometry(f"{new_width}x{new_height}")
+        if new_width > 0 and new_height > 0:
+            osd_window.geometry(f"{new_width}x{new_height}")
 
     osd_window.bind("<Button-1>", on_button_press)
     osd_time_label.bind("<B1-Motion>", drag_window)
@@ -156,7 +157,7 @@ def start_timer():
 
     def update_timer():
         nonlocal total_seconds, elapsed_time, is_finished
-        if total_seconds > 0:
+        if total_seconds > 0 and is_running:
             total_seconds -= 1
             mins, secs = divmod(total_seconds, 60)
             time_label.config(text=f"{mins:02}:{secs:02}")
@@ -188,7 +189,6 @@ def start_timer():
         if is_running:
             is_running = False
             start_button.config(text="🔄")
-            hide_inputs()
             if total_seconds == 0:
                 show_inputs()
         else:
@@ -203,8 +203,6 @@ def start_timer():
                 elapsed_time = 0
                 is_finished = False
                 is_running = True
-                time_label.config(text="00:00")
-                osd_time_label.config(text="00:00")
                 update_timer()
                 start_button.config(text="⏸️")
                 hide_inputs()
