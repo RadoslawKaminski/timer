@@ -11,7 +11,6 @@ def create_tray_icon(root, osd_window):
 
     def show_window(item):
         print("Otwieram okno...")
-        item.stop()
         root.deiconify()
 
     def quit_app(item):
@@ -38,7 +37,8 @@ def create_floating_clock(toggle_osd_state):
     osd_window.overrideredirect(True)  # Usuwamy górny pasek
     osd_window.wm_attributes("-topmost", True)  # Zawsze na wierzchu
     osd_window.wm_attributes("-transparentcolor", "black")  # Ustawiamy czarne tło jako przezroczyste
-    osd_window.geometry("300x200+100+100")  # Ustawiamy rozmiar i pozycję okna
+    osd_window.geometry("300x200")  # Ustawiamy rozmiar i pozycję okna
+    osd_window.minsize(50, 50)
     osd_window.withdraw()  # OSD jest domyślnie ukryte
 
     osd_time_label = tk.Label(osd_window, font=("Arial", 100), bg="black", fg="white", text="00:00")
@@ -84,7 +84,6 @@ def start_timer():
     root.configure(bg="black")
     root.attributes('-topmost', True)
 
-    always_on_top = False
     osd_enabled = False
 
     time_label = tk.Label(root, font=("Arial", 48), bg="black", fg="white", text="00:00")
@@ -113,11 +112,6 @@ def start_timer():
     start_button = tk.Button(button_frame, text="▶️", command=lambda: toggle_timer(), bg="black", fg="white",
                              relief="flat", highlightbackground="white", borderwidth=1, font=("Arial", 20))
     start_button.grid(row=0, column=0, padx=5)
-
-    toggle_on_top_button = tk.Button(button_frame, text="↑", command=lambda: toggle_always_on_top(), bg="black",
-                                     fg="white", relief="flat", highlightbackground="white", borderwidth=1,
-                                     font=("Arial", 20))
-    toggle_on_top_button.grid(row=0, column=1, padx=5)
 
     reset_button = tk.Button(button_frame, text="🔄", command=lambda: reset_timer(), bg="black", fg="white",
                              relief="flat", highlightbackground="white", borderwidth=1, font=("Arial", 20))
@@ -241,12 +235,6 @@ def start_timer():
         osd_time_label.config(text="00:00", fg="white")
         start_button.config(text="▶️")
         show_inputs()
-
-    def toggle_always_on_top():
-        nonlocal always_on_top
-        always_on_top = not always_on_top
-        root.attributes("-topmost", always_on_top)
-        toggle_on_top_button.config(relief=tk.SUNKEN if always_on_top else tk.RAISED)
 
     root.mainloop()
 
