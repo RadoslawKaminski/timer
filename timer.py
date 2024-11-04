@@ -1,4 +1,5 @@
 import tkinter as tk
+import time
 from pystray import Icon, MenuItem, Menu
 from PIL import Image, ImageDraw
 import threading
@@ -45,7 +46,7 @@ def create_floating_clock(toggle_osd_state):
     osd_time_label.pack(fill=tk.BOTH, expand=True)
 
     def update_font_size_osd(event):
-        new_font_size = min(event.width // 4, int(event.height // (5/3)))
+        new_font_size = min(event.width // 4, int(event.height // (5 / 3)))
         osd_time_label.config(font=("Arial", new_font_size))
     osd_window.bind("<Configure>", update_font_size_osd)
 
@@ -93,14 +94,14 @@ def start_timer():
     input_frame = tk.Frame(root, bg="black")
     input_frame.pack(pady=5)
 
-    minute_label = tk.Label(input_frame, text="Minuty:", bg="black", fg="white")
+    minute_label = tk.Label(input_frame, text="Min:", bg="black", fg="white", font=("Arial", 20))
     minute_label.grid(row=0, column=0, padx=(5, 5))
 
     minute_entry = tk.Entry(input_frame, width=5, bg="black", fg="white", borderwidth=2, relief="flat",
                             highlightbackground="white", highlightcolor="white", highlightthickness=1)
     minute_entry.grid(row=0, column=1, padx=(0, 5))
 
-    second_label = tk.Label(input_frame, text="Sekundy:", bg="black", fg="white")
+    second_label = tk.Label(input_frame, text="Sec:", bg="black", fg="white", font=("Arial", 20))
     second_label.grid(row=0, column=2, padx=(5, 5))
 
     second_entry = tk.Entry(input_frame, width=5, bg="black", fg="white", borderwidth=2, relief="flat",
@@ -110,9 +111,9 @@ def start_timer():
     button_frame = tk.Frame(root, bg="black")
     button_frame.pack(pady=5)
 
-    start_button = tk.Button(button_frame, text="▶️", command=lambda: toggle_timer(), bg="black", fg="white",
+    start_button = tk.Button(button_frame, text="▶", command=lambda: toggle_timer(), bg="black", fg="white",
                              relief="flat", highlightbackground="white", borderwidth=1, font=("Arial", 20))
-    start_button.grid(row=0, column=0, padx=5)
+    start_button.grid(row=0, column=1, padx=5)
 
     reset_button = tk.Button(button_frame, text="🔄", command=lambda: reset_timer(), bg="black", fg="white",
                              relief="flat", highlightbackground="white", borderwidth=1, font=("Arial", 20))
@@ -124,6 +125,8 @@ def start_timer():
     elapsed_time = 0
     is_finished = False
     is_running = False
+    clean = True
+    last_time_called = 0
 
     def toggle_osd_state():
         nonlocal osd_enabled
@@ -143,7 +146,7 @@ def start_timer():
 
     def update_font_size_root(event):
         if event.widget == root:
-            new_font_size = min(event.width // 4, int((event.height-100) // (5/3)))
+            new_font_size = min(event.width // 4, int((event.height - 100) // (5 / 3)))
             time_label.config(font=("Arial", new_font_size))
     root.bind("<Configure>", update_font_size_root)
 
@@ -152,11 +155,14 @@ def start_timer():
     def minimize_to_tray(event=None):
         print("Minimalizuję do zasobnika...")
         root.withdraw()
-
     root.protocol("WM_DELETE_WINDOW", minimize_to_tray)
 
     def update_timer():
-        nonlocal total_seconds, elapsed_time, is_finished
+        nonlocal total_seconds, elapsed_time, is_finished, is_running, last_time_called
+        delta = time.time() - last_time_called
+        if delta < 0.9:
+            return
+        last_time_called = time.time()
         if total_seconds > 0 and is_running:
             total_seconds -= 1
             mins, secs = divmod(total_seconds, 60)
@@ -184,27 +190,30 @@ def start_timer():
                 root.after(1000, update_timer)
 
     def toggle_timer():
-        nonlocal original_minutes, original_seconds, total_seconds, elapsed_time, is_finished, is_running
+        nonlocal original_minutes, original_seconds, total_seconds, elapsed_time, is_finished, is_running, clean
 
         if is_running:
             is_running = False
-            start_button.config(text="🔄")
-            if total_seconds == 0:
-                show_inputs()
+            start_button.config(text="▶")
         else:
             try:
-                minutes_input = minute_entry.get().strip()
-                seconds_input = second_entry.get().strip()
+                if clean:
+                    minutes_input = minute_entry.get().strip()
+                    seconds_input = second_entry.get().strip()
 
-                original_minutes = int(minutes_input) if minutes_input else 0
-                original_seconds = int(seconds_input) if seconds_input else 0
+                    original_minutes = int(minutes_input) if minutes_input else 0
+                    original_seconds = int(seconds_input) if seconds_input else 0
 
-                total_seconds = original_minutes * 60 + original_seconds
-                elapsed_time = 0
-                is_finished = False
+                    total_seconds = original_minutes * 60 + original_seconds
+                    mins, secs = divmod(total_seconds, 60)
+                    time_label.config(text=f"{mins:02}:{secs:02}")
+                    osd_time_label.config(text=f"{mins:02}:{secs:02}")
+                    elapsed_time = 0
+                    clean = False
+                    is_finished = False
                 is_running = True
-                update_timer()
-                start_button.config(text="⏸️")
+                root.after(1000, update_timer)
+                start_button.config(text="⏸")
                 hide_inputs()
             except ValueError:
                 time_label.config(text="Wprowadź poprawne liczby!")
@@ -222,18 +231,16 @@ def start_timer():
         second_entry.grid(row=0, column=3, padx=(0, 5))
 
     def reset_timer():
-        nonlocal total_seconds, elapsed_time, is_finished, is_running
-        minute_entry.delete(0, tk.END)
-        second_entry.delete(0, tk.END)
-        total_seconds = 0
-        elapsed_time = 0
+        nonlocal is_finished, is_running, clean
         is_finished = False
         is_running = False
+        clean = True
         time_label.config(text="00:00", fg="white")
         osd_time_label.config(text="00:00", fg="white")
-        start_button.config(text="▶️")
+        start_button.config(text="▶")
         show_inputs()
 
     root.mainloop()
+
 
 start_timer()
