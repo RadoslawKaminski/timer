@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a80d5dc9-e8c1-44ec-8383-b52b12e5577f" name="Changes" comment="fixed buttons bugs and issues">
+    <list default="true" id="a80d5dc9-e8c1-44ec-8383-b52b12e5577f" name="Changes" comment="timer.exe update">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/timer.py" beforeDir="false" afterPath="$PROJECT_DIR$/timer.py" afterDir="false" />
     </list>
@@ -98,7 +98,23 @@
       <option name="project" value="LOCAL" />
       <updated>1730681109076</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="show END on 00:00">
+      <option name="closed" value="true" />
+      <created>1730681427778</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1730681427778</updated>
+    </task>
+    <task id="LOCAL-00007" summary="timer.exe update">
+      <option name="closed" value="true" />
+      <created>1730681698356</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1730681698356</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -118,6 +134,8 @@
     <MESSAGE value="deleted always_on_top button" />
     <MESSAGE value="fixed osd resize and pausing" />
     <MESSAGE value="fixed buttons bugs and issues" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed buttons bugs and issues" />
+    <MESSAGE value="show END on 00:00" />
+    <MESSAGE value="timer.exe update" />
+    <option name="LAST_COMMIT_MESSAGE" value="timer.exe update" />
   </component>
 </project>

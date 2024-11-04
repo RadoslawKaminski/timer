@@ -18,6 +18,7 @@ def create_tray_icon(root, osd_window):
         print("Zamykam aplikację...")
         item.stop()
         root.quit()
+        quit()
 
     def toggle_osd():
         if osd_window.winfo_viewable():
