@@ -152,7 +152,7 @@ def start_timer():
 
     create_tray_icon(root, osd_window)
 
-    def minimize_to_tray(event=None):
+    def minimize_to_tray():
         print("Minimalizuję do zasobnika...")
         root.withdraw()
     root.protocol("WM_DELETE_WINDOW", minimize_to_tray)
@@ -163,7 +163,7 @@ def start_timer():
         if delta < 0.9:
             return
         last_time_called = time.time()
-        if total_seconds > 0 and is_running:
+        if total_seconds > 1 and is_running:
             total_seconds -= 1
             mins, secs = divmod(total_seconds, 60)
             time_label.config(text=f"{mins:02}:{secs:02}")
@@ -174,6 +174,7 @@ def start_timer():
             root.after(1000, update_timer)
         elif is_running:
             if not is_finished:
+                total_seconds -= 1
                 root.geometry("400x200")
                 root.deiconify()
                 root.attributes("-topmost", True)

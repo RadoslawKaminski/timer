@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a80d5dc9-e8c1-44ec-8383-b52b12e5577f" name="Changes" comment="fixed osd resize and pausing">
+    <list default="true" id="a80d5dc9-e8c1-44ec-8383-b52b12e5577f" name="Changes" comment="fixed buttons bugs and issues">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/timer.py" beforeDir="false" afterPath="$PROJECT_DIR$/timer.py" afterDir="false" />
     </list>
@@ -90,7 +90,15 @@
       <option name="project" value="LOCAL" />
       <updated>1730675233917</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="fixed buttons bugs and issues">
+      <option name="closed" value="true" />
+      <created>1730681109076</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1730681109076</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -109,6 +117,7 @@
     <MESSAGE value="unversioned files" />
     <MESSAGE value="deleted always_on_top button" />
     <MESSAGE value="fixed osd resize and pausing" />
-    <option name="LAST_COMMIT_MESSAGE" value="fixed osd resize and pausing" />
+    <MESSAGE value="fixed buttons bugs and issues" />
+    <option name="LAST_COMMIT_MESSAGE" value="fixed buttons bugs and issues" />
   </component>
 </project>
