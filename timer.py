@@ -9,12 +9,14 @@ import pygame
 # Initialize pygame mixer
 pygame.mixer.init()
 
+
 def play_loud_sound():
     pygame.mixer.music.load("alarm.wav")  # Replace with the path to your sound file
     pygame.mixer.music.set_volume(1.0)  # Volume ranges from 0.0 to 1.0 (1.0 is max volume)
     pygame.mixer.music.play()
 
-def create_tray_icon(root, osd_window):
+
+def create_tray_icon(root, osd_window, toggle_osd):
     image = Image.new('RGB', (64, 64), color='black')
     draw = ImageDraw.Draw(image)
     draw.rectangle([16, 16, 48, 48], fill='white')
@@ -28,14 +30,6 @@ def create_tray_icon(root, osd_window):
         item.stop()
         root.quit()
         quit()
-
-    def toggle_osd():
-        if osd_window.winfo_viewable():
-            print("Ukrywam OSD...")
-            osd_window.withdraw()
-        else:
-            print("Pokazuję OSD...")
-            osd_window.deiconify()
 
     menu = Menu(MenuItem('Pokaż', show_window), MenuItem('Zamknij', quit_app), MenuItem('Włącz/Odłącz OSD', toggle_osd))
     icon = Icon("Minutnik", image, menu=menu)
@@ -58,6 +52,7 @@ def create_floating_clock(toggle_osd_state):
     def update_font_size_osd(event):
         new_font_size = min(event.width // 4, int(event.height // (5 / 3)))
         osd_time_label.config(font=("Arial", new_font_size))
+
     osd_window.bind("<Configure>", update_font_size_osd)
 
     # Zmienne do przechowywania pozycji
@@ -157,13 +152,15 @@ def start_timer():
         if event.widget == root:
             new_font_size = min(event.width // 4, int((event.height - 100) // (5 / 3)))
             time_label.config(font=("Arial", new_font_size))
+
     root.bind("<Configure>", update_font_size_root)
 
-    create_tray_icon(root, osd_window)
+    create_tray_icon(root, osd_window, toggle_osd_state)
 
     def minimize_to_tray():
         print("Minimalizuję do zasobnika...")
         root.withdraw()
+
     root.protocol("WM_DELETE_WINDOW", minimize_to_tray)
 
     def update_timer():
@@ -182,14 +179,16 @@ def start_timer():
                 osd_time_label.config(fg="red")
             root.after(1000, update_timer)
         elif is_running:
-            if not is_finished:
+            if not is_finished and (original_minutes != 0 or original_seconds != 0):
                 total_seconds -= 1
-                root.geometry("400x200")
-                root.deiconify()
+                if osd_enabled:
+                    toggle_osd_state()
+                elif not root.winfo_viewable():
+                    root.geometry("400x200")
+                    root.deiconify()
                 root.attributes("-topmost", True)
                 time_label.config(text="END")
                 osd_time_label.config(text="END")
-                if osd_enabled: osd_window.withdraw()
                 is_finished = True
                 hide_inputs()
                 play_loud_sound()
