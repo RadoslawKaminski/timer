@@ -3,7 +3,16 @@ import time
 from pystray import Icon, MenuItem, Menu
 from PIL import Image, ImageDraw
 import threading
+import winsound
+import pygame
 
+# Initialize pygame mixer
+pygame.mixer.init()
+
+def play_loud_sound():
+    pygame.mixer.music.load("alarm.wav")  # Replace with the path to your sound file
+    pygame.mixer.music.set_volume(1.0)  # Volume ranges from 0.0 to 1.0 (1.0 is max volume)
+    pygame.mixer.music.play()
 
 def create_tray_icon(root, osd_window):
     image = Image.new('RGB', (64, 64), color='black')
@@ -183,6 +192,7 @@ def start_timer():
                 osd_time_label.config(text="END")
                 is_finished = True
                 hide_inputs()
+                play_loud_sound()
                 root.after(1000, update_timer)
             else:
                 elapsed_time += 1
@@ -241,6 +251,7 @@ def start_timer():
         osd_time_label.config(text="00:00", fg="white")
         start_button.config(text="▶")
         show_inputs()
+        pygame.mixer.music.stop()
 
     root.mainloop()
 
