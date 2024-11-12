@@ -142,8 +142,7 @@ def start_timer():
         nonlocal osd_enabled
         if osd_enabled:
             osd_window.withdraw()
-            root.geometry(
-                f"{osd_window.winfo_width()}x{osd_window.winfo_height()}+{osd_window.winfo_x()}+{osd_window.winfo_y()}")
+            root.geometry(f"{osd_window.winfo_width()}x{osd_window.winfo_height()}+{osd_window.winfo_x()}+{osd_window.winfo_y()}")
             root.deiconify()
         else:
             root.withdraw()
@@ -168,7 +167,7 @@ def start_timer():
     root.protocol("WM_DELETE_WINDOW", minimize_to_tray)
 
     def update_timer():
-        nonlocal total_seconds, elapsed_time, is_finished, is_running, last_time_called
+        nonlocal total_seconds, elapsed_time, is_finished, is_running, last_time_called, osd_enabled
         delta = time.time() - last_time_called
         if delta < 0.9:
             return
@@ -190,6 +189,7 @@ def start_timer():
                 root.attributes("-topmost", True)
                 time_label.config(text="END")
                 osd_time_label.config(text="END")
+                if osd_enabled: osd_window.withdraw()
                 is_finished = True
                 hide_inputs()
                 play_loud_sound()
