@@ -102,14 +102,14 @@ def start_timer():
     minute_label = tk.Label(input_frame, text="Min:", bg="black", fg="white", font=("Arial", 20))
     minute_label.grid(row=0, column=0, padx=(5, 5))
 
-    minute_entry = tk.Entry(input_frame, width=5, bg="black", fg="white", borderwidth=2, relief="flat",
+    minute_entry = tk.Entry(input_frame, width=2, bg="black", fg="white", borderwidth=2, relief="flat", font=("Arial", 20),
                             highlightbackground="white", highlightcolor="white", highlightthickness=1)
     minute_entry.grid(row=0, column=1, padx=(0, 5))
 
     second_label = tk.Label(input_frame, text="Sec:", bg="black", fg="white", font=("Arial", 20))
     second_label.grid(row=0, column=2, padx=(5, 5))
 
-    second_entry = tk.Entry(input_frame, width=5, bg="black", fg="white", borderwidth=2, relief="flat",
+    second_entry = tk.Entry(input_frame, width=2, bg="black", fg="white", borderwidth=2, relief="flat", font=("Arial", 20),
                             highlightbackground="white", highlightcolor="white", highlightthickness=1)
     second_entry.grid(row=0, column=3, padx=(0, 5))
 
